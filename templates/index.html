@@ -1,0 +1,25 @@
+<html>
+  <head>
+    <title>Pi Video Surveillance</title>
+  </head>
+  <body>
+    <h1>Pi Video Surveillances</h1>
+<button onclick="myFunction()">Try it</button>
+	<button type="button" onclick="alert('Hello world!')"> add</button>
+    <img src="{{ url_for('video_feed') }}" />
+<div id="myDIV">
+This is my DIV element.
+</div>
+<script>
+function myFunction() {
+  var x = document.getElementById("myDIV");
+  if (x.style.display === "none") {
+    x.style.display = "block";
+  } else {
+    x.style.display = "none";
+  }
+}
+</script>
+
+  </body>
+</html>

@@ -1,0 +1,36 @@
+{% extends 'base.html'%} {% block head %} {% endblock %} {% block body %}
+<a href="/room{{room}}/choose_course" class="button">back</a>
+
+<h1>Room {{room}} Course {{course}} are streaming</h1>
+<img src="{{ url_for('video_feed') }}" />
+<br />
+<form action="#" method="post">
+  <p>
+    <input type="submit" name="button" value="check" />
+    <input type="submit" name="button" value="clear" />
+    <a href="http://192.168.2.36:8000">click me</a>
+    <a href="https://www.w3schools.com">Visit W3Schools</a>
+
+    <a href="192.168.2.36:8000">click me</a>
+  </p>
+</form>
+<div class="container">
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Student ID</th>
+        <th>Student Name</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for student in students %}
+      <tr>
+        <td>{{student["id"]}}</td>
+        <td>{{student["name"]}}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+{% endblock %}
