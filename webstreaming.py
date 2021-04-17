@@ -197,7 +197,15 @@ def live(room, course):
 						extractEmbedding = embeddingExtractor.extract(alignedFaces)
 						# Compare embedding
 						distance = cdist(faces, extractEmbedding)
-						distance = distance.reshape(distance.shape[1],distance.shape[0])
+						a = []
+						if len(distance):
+							for i in range(len(distance[0])):
+								b = []
+								for j in range(len(distance)):
+									b.append(distance[j][i])
+								a.append(b)
+						distance = a
+
 						### Draw face ##
 						for faceIdx, faceBox in enumerate(faceBoxes):
 							### find min distance
