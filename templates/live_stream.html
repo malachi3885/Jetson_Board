@@ -3,15 +3,17 @@
 
 <h1>Room {{room}} Course {{course}} are streaming</h1>
 <img src="{{ url_for('video_feed') }}" />
+<img src="{{ img }}" />
 <br />
 <form action="#" method="post">
   <p>
     <input type="submit" name="button" value="check" />
-    <input type="submit" name="button" value="clear" />
-    <a href="http://192.168.2.36:8000">click me</a>
-    <a href="https://www.w3schools.com">Visit W3Schools</a>
+    <input type="submit" name="button" value="confirm check" />
 
-    <a href="192.168.2.36:8000">click me</a>
+    <input type="text" name="add_id" style="width: 40%" />
+    <input type="text" name="add_name" style="width: 40%" />
+    <input type="submit" name="button" value="add" />
+    <input type="submit" name="button" value="clear" />
   </p>
 </form>
 <div class="container">
