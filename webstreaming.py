@@ -29,7 +29,7 @@ inputStream = cv2.VideoCapture(0)
 app.config['SECRET_KEY'] = 'tempKey'
 
 #TODO
-# cron = CronTab(user='root')
+cron = CronTab(user='mickey')
 
 detector = faceDetectorAndAlignment('models/faceDetector.onnx', processScale=0.5)
 embeddingExtractor = faceEmbeddingExtractor('models/r100-fast-dynamic.onnx')
@@ -57,7 +57,7 @@ def formatdatetime(x):
 	else:
 		return str(x)
 #TODO
-"""
+
 def writetime(hour, minute, endhour, endminute, day, month, n):
 	hour = int(hour)
 	minute = int(minute)
@@ -115,7 +115,7 @@ def writetime(hour, minute, endhour, endminute, day, month, n):
 	job.dom.on(day)
 	job.month.on(month)
 	cron.write()
-"""
+
 
 
 
@@ -140,7 +140,7 @@ def set_clock():
 			temp['end'] = end
 			tabledata.append(temp)
 #TODO
-	"""
+	
 	if form.validate_on_submit():
 		day, month = form.date.data.split('/')
 		beginhour, beginminute = form.starttime.data.split(':')
@@ -155,7 +155,7 @@ def set_clock():
 		writetime(beginhour, beginminute, endhour, endminute, day, month, -10)
 		
 		return redirect(url_for('set_clock'))
-	"""	
+	
 	return render_template('clock.html', form=form, data=tabledata)
 
 def gen():
