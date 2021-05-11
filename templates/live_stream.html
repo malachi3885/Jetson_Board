@@ -1,38 +1,68 @@
 {% extends 'base.html'%} {% block head %} {% endblock %} {% block body %}
 <a href="/room{{room}}/choose_course" class="button">back</a>
+<div class="header">
+  <h1 class="header-font">Room {{room}}</h1>
+  <h3 class="sub-header-font">
+    Course {{course}} &nbsp;&nbsp;&nbsp; Section 2
+  </h3>
+</div>
+<!-- <img src="{{ url_for('static', filename='img.png') }}" alt="{{ user_img }}" /> -->
 
-<h1>Room {{room}} Course {{course}} are streaming</h1>
-<img src="{{ url_for('video_feed') }}" />
-<img src="{{ img }}" />
 <br />
-<form action="#" method="post">
-  <p>
-    <input type="submit" name="button" value="check" />
-    <input type="submit" name="button" value="confirm check" />
+<div class="live">
+  <div class="live-left">
+    <img src="{{ url_for('video_feed') }}" style="width: 100%" />
+    <form action="#" method="post" style="margin-top: 10px">
+      <p>
+        <input type="submit" name="button" value="Show" />
 
-    <input type="text" name="add_id" style="width: 40%" />
-    <input type="text" name="add_name" style="width: 40%" />
-    <input type="submit" name="button" value="add" />
-    <input type="submit" name="button" value="clear" />
-  </p>
-</form>
-<div class="container">
-  <table class="table table-striped">
-    <thead>
-      <tr>
-        <th>Student ID</th>
-        <th>Student Name</th>
-      </tr>
-    </thead>
-    <tbody>
-      {% for student in students %}
-      <tr>
-        <td>{{student["id"]}}</td>
-        <td>{{student["name"]}}</td>
-      </tr>
-      {% endfor %}
-    </tbody>
-  </table>
+        <input class="right" type="submit" name="button" value="Check" />
+      </p>
+    </form>
+  </div>
+  <div class="live-right">
+    <h1>Add Name</h1>
+    <form action="#" method="post">
+      <p>
+        <input type="text" name="add_id" style="width: 40%" />
+        <input type="text" name="add_name" style="width: 40%" />
+        <input type="submit" name="button" value="Add" />
+      </p>
+    </form>
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Student ID</th>
+          <th>Student Name</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for student in students %}
+        <tr>
+          <td>{{student["id"]}}</td>
+          <td>{{student["name"]}}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    <form action="#" method="post">
+      <p>
+        <input
+          class="btn btn-danger"
+          type="submit"
+          name="button"
+          value="Clear"
+        />
+
+        <input
+          class="btn btn-success right"
+          type="submit"
+          name="button"
+          value="Confirm"
+        />
+      </p>
+    </form>
+  </div>
 </div>
 
 {% endblock %}

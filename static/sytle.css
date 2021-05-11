@@ -1,0 +1,39 @@
+.header {
+  background-color: #e2e2e2;
+  color: #5a5a5a;
+  width: 70%;
+  margin-left: 15%;
+}
+
+.header-font {
+  font-size: 110px;
+  text-align: center;
+}
+
+.sub-header-font {
+  font-weight: lighter;
+  font-size: 40px;
+  text-align: center;
+}
+
+.live-left {
+  width: 50%;
+  margin-left: 20px;
+}
+
+.live-right {
+  width: 40%;
+  margin-left: 5%;
+}
+
+.right {
+  float: right;
+}
+
+.live {
+  display: flex;
+}
+
+.border {
+  border: 2px solid black;
+}

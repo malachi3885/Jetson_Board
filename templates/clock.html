@@ -14,11 +14,31 @@
 				padding-right: 10px;
 				width: 100%
 			}
+            .header {
+                background-color: #e2e2e2;
+                color: #5a5a5a;
+                width: 70%;
+                margin-left: 15%;
+                height: 180px;
+            }
+            .header-font {
+            font-size: 130px;
+            text-align: center;
+            position: relative;
+            top: 50%;
+            -webkit-transform: translateY(-50%);
+            -ms-transform: translateY(-50%);
+            transform: translateY(-50%);
+            }
 		</style>
+        
 	</head>
 	<body>
+          <a href="/room{{room}}" class="button">back</a>
+        <div class="header">
+        <h1 class="header-font">Room {{room}}</h1>
+        </div>
 		<div class="custom-container">
-			<a href="/">choose another room</a>
 		</div>
 		{% for mess in get_flashed_messages() %}
 			<div class="alert alert-success alert-dismissable fade show" role="alert" style="margin-left:30px; margin-right:30px;">
@@ -26,9 +46,7 @@
 				<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
 			</div>
 		{% endfor %}
-		<div class="container">
-			<h2>Room 0</h2>
-		</div>	
+		
 		<p>
 			<div class="container">
 				<button class="btn btn-light" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExaple">
@@ -39,7 +57,7 @@
 		</p>
 		<div class="collapse" id="collapseExample">
 			<div class="container">
-				<form action="{{url_for('set_clock')}}" method="post">
+				<form action="{{ url_for('set_clock', room=309)}}" method="post">
 					<div class="card" style="width: 18rem; padding-left:20px; padding-right:20px; padding-bottom:15px;">
 						{{form.hidden_tag()}}
 						{{form.date.label}} {{form.date(placeholder = "dd/MM")}}
@@ -72,6 +90,7 @@
 			</table>
 		</div>
 	</body>
+ 
 </html>
 
 

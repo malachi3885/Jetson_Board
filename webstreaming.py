@@ -119,16 +119,15 @@ def writetime(hour, minute, endhour, endminute, day, month, n):
 
 
 
-@app.route('/choose_action_<room>')
+@app.route('/room<room>')
 def index(room):
 	return  render_template('choose_action.html', room=room)
 
-@app.route('/clock', methods=['GET','POST'])
-def set_clock():
+@app.route('/room<room>/clock', methods=['GET','POST'])
+def set_clock(room):
 	form = setupForm()
 	
 	tabledata = list()
-	
 	for job in cron:
 
 		temp = dict()
@@ -154,9 +153,9 @@ def set_clock():
 		writetime(beginhour, beginminute, endhour, endminute, day, month, -1)
 		writetime(beginhour, beginminute, endhour, endminute, day, month, -10)
 		
-		return redirect(url_for('set_clock'))
+		return redirect(url_for('set_clock', room=room))
 	
-	return render_template('clock.html', form=form, data=tabledata)
+	return render_template('clock.html', form=form, data=tabledata, room=room)
 
 def gen():
     while True:
@@ -171,10 +170,9 @@ students.append(student)
 
 @app.route('/room<room>/course<course>/live', methods=['POST', 'GET'])
 def live(room, course):
-    img = cv2.imread('./img.png')
 
     if request.method == 'POST':
-        if request.form['button'] == 'check':
+        if request.form['button'] == 'Check':
             faces = np.load('./storeEmbedding/embedding.npy', allow_pickle=True)
             if (faces.size!=0):
                 name = np.load('./storeEmbedding/name.npy', allow_pickle=True)
@@ -221,14 +219,15 @@ def live(room, course):
                             else:
                                 cv2.rectangle(inputFrame, (x1, y1), (x2, y2), (0, 0, 255), 2)
                                 cv2.putText(inputFrame, 'Unknowed', (x1,y1-5), cv2.FONT_HERSHEY_COMPLEX, 0.7,(0,0,255),2) 
-                            status = cv2.imwrite('./img.png',inputFrame)
-                            print(status)	
+                            print('check')
+                            # status = cv2.imwrite('./static/img.png',inputFrame)
+                            # print(status)	
                         
                             
                             
 
 
-        elif request.form['button'] == 'clear':
+        elif request.form['button'] == 'Clear':
             
             faces = np.load('./storeEmbedding/embedding.npy', allow_pickle=True)
 
@@ -236,7 +235,7 @@ def live(room, course):
             print(students)
             
             students.clear()
-        elif request.form['button'] == 'add' :
+        elif request.form['button'] == 'Add' :
             student = dict()
             
             add_id = request.form['add_id']
@@ -245,7 +244,7 @@ def live(room, course):
                 student['id'] = add_id
                 student['name'] = add_name
                 students.append(student)
-        elif request.form['button'] == 'confirm check' :
+        elif request.form['button'] == 'Confirm' :
             url = 'https://face-senior.herokuapp.com/addAttendants'
             #TODO แก้backend
             date = datetime.date.today().strftime("%d/%m/%Y")
@@ -264,8 +263,13 @@ def live(room, course):
             result = json.loads(res.content)
             print('res')
             print(result)
+    #TODO
+    # img = cv2.imread('./img.png')
+    # img = os.path.join('static', 'img.png')
+    # print('img', img)
+    # return render_template('live_stream.html', room=room, course=course, students=students, user_img=img)
+    return render_template('live_stream.html', room=room, course=course, students=students)
 
-    return render_template('live_stream.html', room=room, course=course, students=students, img=img)
 
 
 @app.route('/video_feed')
@@ -340,7 +344,7 @@ def course(room):
 
         result = json.loads(res.content)
 
-        return render_template('choose_course.html', courses=result['courses'])
+        return render_template('choose_course.html', courses=result['courses'], room=room)
 
 
 # ลบออก

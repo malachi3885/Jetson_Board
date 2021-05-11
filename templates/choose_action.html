@@ -1,7 +1,7 @@
 {% extends 'base.html'%} {% block head %} {% endblock %} {% block body %}
 <div class="choose-action">
   <p>Room {{room}} Choose</p>
-  <a href="/clock" class="button">Setting Clock</a>
+  <a href="/room{{room}}/clock" class="button">Setting Clock</a>
   <a href="/room{{room}}/choose_course" class="button">Live Stream</a>
 </div>
 
