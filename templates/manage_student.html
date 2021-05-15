@@ -1,0 +1,33 @@
+{% extends 'base.html'%} {% block head %} {% endblock %} {% block body %}
+<a href="/admin" class="back-button">Back </a>
+<div class="header" style="height: 150px">
+  <h1 class="header-font">Manage Student</h1>
+</div>
+<!-- <img src="{{ url_for('static', filename='img.png') }}" alt="{{ user_img }}" /> -->
+
+<div class="manage-student">
+  <input type="text" />
+  <input type="submit" name="button" value="Search" />
+  <input type="submit" name="button" value="Add" />
+  <table class="table table-striped student-table">
+    <thead>
+      <tr>
+        <th>Student ID</th>
+        <th>Student Name</th>
+        <th>Nickname</th>
+        <th>GPAX</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for student in students %}
+      <tr>
+        <td>{{student["id"]}}</td>
+        <td>{{student["name"]}}</td>
+        <td>{{student["Nickname"]}}</td>
+        <td>{{student["GPAX"]}}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

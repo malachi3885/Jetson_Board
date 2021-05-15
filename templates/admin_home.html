@@ -1,0 +1,66 @@
+{% extends 'base.html'%} {% block head %} {% endblock %} {% block body %}
+<a href="" class="back-button">Back</a>
+<br />
+<br />
+
+<div class="header-iClock">
+  <h1 class="header-iClock-left">iClock</h1>
+  <div class="header-iClock-right">
+    <h3 class="sub-header-font low-line-height">
+      A smart classroom LED clock with
+    </h3>
+    <h3 class="sub-header-font low-line-height">Face Recognition based</h3>
+    <h3 class="sub-header-font low-line-height">Attendant Management System</h3>
+    <h3 class="sub-header-font low-line-height">
+      and Digital Announcement System
+    </h3>
+  </div>
+</div>
+<!-- <img src="{{ url_for('static', filename='img.png') }}" alt="{{ user_img }}" /> -->
+
+<br />
+<div class="admin-homepage">
+  <div class="admin-homepage-left">
+    <img
+      src="{{url_for('static', filename='clock.jpg')}}"
+      alt=""
+      style="width: 200px; height: 200px"
+    />
+    <form action="/setting_clock">
+      <input
+        class="btn btn-primary"
+        type="submit"
+        name="button"
+        value="Setting Clock"
+        style="margin-top: 20px"
+      />
+    </form>
+  </div>
+  <div class="admin-homepage-right">
+    <img
+      src="{{url_for('static', filename='list.jpg')}}"
+      alt=""
+      style="width: 230px; height: 230px"
+    />
+    <form action="/manage_student">
+      <input
+        class="btn btn-success"
+        type="submit"
+        name="button"
+        value="Manage Student"
+      />
+    </form>
+
+    <form action="/manage_course">
+      <input
+        class="btn btn-success"
+        type="submit"
+        name="button"
+        value="Manage Course"
+        style="margin-top: 13px"
+      />
+    </form>
+  </div>
+</div>
+
+{% endblock %}

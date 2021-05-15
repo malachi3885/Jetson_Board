@@ -1,0 +1,39 @@
+{% extends 'base.html'%} {% block head %} {% endblock %} {% block body %}
+<a href="/admin" class="back-button">Back </a>
+<br />
+<br />
+
+<div class="header" style="height: 150px">
+  <h1 class="header-font">Setting Clock</h1>
+</div>
+<!-- <img src="{{ url_for('static', filename='img.png') }}" alt="{{ user_img }}" /> -->
+<br />
+<div class="login">
+  <h2 class="light">Choose Room</h2>
+  <br />
+
+  <div class="flex">
+    <input class="full-width" />
+    <input
+      class="setting-clock-button"
+      type="submit"
+      name="button"
+      value="Enter"
+    />
+  </div>
+  <br />
+
+  <h2 class="light">Or</h2>
+  <br />
+  <div class="flex">
+    <h2 class="light">Add by Excel</h2>
+    <input
+      class="setting-clock-button"
+      type="submit"
+      name="button"
+      value="Add"
+    />
+  </div>
+</div>
+
+{% endblock %}

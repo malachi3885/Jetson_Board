@@ -1,0 +1,35 @@
+{% extends 'base.html'%} {% block head %} {% endblock %} {% block body %}
+<br />
+<div class="header-iClock">
+  <h1 class="header-iClock-left">iClock</h1>
+  <div class="header-iClock-right">
+    <h3 class="sub-header-font low-line-height">
+      A smart classroom LED clock with
+    </h3>
+    <h3 class="sub-header-font low-line-height">Face Recognition based</h3>
+    <h3 class="sub-header-font low-line-height">Attendant Management System</h3>
+    <h3 class="sub-header-font low-line-height">
+      and Digital Announcement System
+    </h3>
+  </div>
+</div>
+<!-- <img src="{{ url_for('static', filename='img.png') }}" alt="{{ user_img }}" /> -->
+
+<br />
+<div class="login">
+  <h2 class="light">ID</h2>
+  <input class="full-width" />
+  <h2 class="light">Password</h2>
+  <input class="full-width" />
+  <br />
+  <br />
+  <input
+    style="font-size: 18px"
+    class="btn btn-primary full-width"
+    type="submit"
+    name="button"
+    value="Login"
+  />
+</div>
+
+{% endblock %}

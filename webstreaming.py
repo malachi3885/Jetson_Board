@@ -22,7 +22,8 @@ lock = threading.Lock()
 
 app = Flask(__name__)
 
-inputStream = cv2.VideoCapture(0)
+#TODO
+# inputStream = cv2.VideoCapture(0)
 #time.sleep(2.0)
 
 # Add from satit file
@@ -119,9 +120,42 @@ def writetime(hour, minute, endhour, endminute, day, month, n):
 
 
 
-@app.route('/room<room>')
-def index(room):
-	return  render_template('choose_action.html', room=room)
+
+
+@app.route('/login', methods=['GET','POST'])
+def login():
+	return render_template('login.html')
+
+@app.route('/admin', methods=['GET','POST'])
+def admin_home():
+	return render_template('admin_home.html')
+
+@app.route('/setting_clock', methods=['GET','POST'])
+def setting_clock():
+	return render_template('setting_clock.html')
+
+@app.route('/manage_student', methods=['GET','POST'])
+def manage_student():
+    students = list()
+    student = dict({'id': '6030631621', 'name': 'Itsara', 'Nickname': 'Mickey', 'GPAX': '3.05'})
+    students.append(student)
+    student = dict({'id': '6030631321', 'name': 'Satit', 'Nickname': 'Tui', 'GPAX': '3.05'})
+    students.append(student)
+    student = dict({'id': '6030631221', 'name': 'Anawat', 'Nickname': 'Pau', 'GPAX': '3.05'})
+    students.append(student)
+    return render_template('manage_student.html', students=students)
+
+@app.route('/manage_course', methods=['GET','POST'])
+def manage_course():
+    courses = list()
+    course = dict({'id': '2100499', 'name': 'Project XD', 'section': '1', 'year': '2563', 'semester': '2'})
+    courses.append(course)
+    course = dict({'id': '2110499', 'name': 'Eng Project', 'section': '1', 'year': '2563', 'semester': '2'})
+    courses.append(course)
+    course = dict({'id': '2100471', 'name': 'VLSI', 'section': '1', 'year': '2563', 'semester': '2'})
+    courses.append(course)
+    
+    return render_template('manage_course.html', courses=courses)
 
 @app.route('/room<room>/clock', methods=['GET','POST'])
 def set_clock(room):
@@ -164,13 +198,13 @@ def gen():
         (flag, encoedImage) = cv2.imencode(".jpg",frame)
         yield (b'--frame\r\n' b'Content-Type: image/jpeg\r\n\r\n' + bytearray(encoedImage) + b'\r\n')
 
-students = list()
-student = dict({'id': '6030631621', 'name': 'Itsara'})
-students.append(student)
+
 
 @app.route('/room<room>/course<course>/live', methods=['POST', 'GET'])
 def live(room, course):
-
+    students = list()
+    student = dict({'id': '6030631621', 'name': 'Itsara'})
+    students.append(student)
     if request.method == 'POST':
         if request.form['button'] == 'Check':
             faces = np.load('./storeEmbedding/embedding.npy', allow_pickle=True)
@@ -270,88 +304,16 @@ def live(room, course):
     # return render_template('live_stream.html', room=room, course=course, students=students, user_img=img)
     return render_template('live_stream.html', room=room, course=course, students=students)
 
+@app.route('/room<room>/choose_course')
+def course(room):
+    return render_template('choose_course.html',room=room)
 
 
 @app.route('/video_feed')
 def video_feed():
     return Response(gen(), mimetype='multipart/x-mixed-replace; boundary=frame')
 
-@app.route('/room<room>/choose_course', methods=['POST', 'GET'])
-def course(room):
-    if request.method == 'POST':
-        count = True
-        course = request.form['course']
-        url = 'https://face-senior.herokuapp.com/fetchStudent'
 
-        payload = {'course_id' : course, 'semester': 2, 'academic_year': 2564}
-
-        res = requests.post(url, json=payload, allow_redirects=True)
-        result = json.loads(res.content)
-        if (result['course'] == 'not found this course'):
-            print('abc')
-            embed = []
-            names = []
-            ids = []
-            gpaxs = []
-
-
-            np.save('./storeEmbedding/embedding.npy', np.array([]))
-            np.save('./storeEmbedding/name.npy', np.array([]))
-            np.save('./storeEmbedding/id.npy', np.array([]))
-            np.save('./storeEmbedding/gpax.npy', np.array([]))
-
-
-        else :
-            print('def')
-            for student in result['student']:
-                print(student['student_first_name'])
-                if count :
-                    embed = []
-                    names = []
-                    ids = []
-                    gpaxs = []
-                    np.save('./storeEmbedding/embedding.npy', np.array([]))
-                    np.save('./storeEmbedding/name.npy', np.array([]))
-                    np.save('./storeEmbedding/id.npy', np.array([]))
-                    np.save('./storeEmbedding/gpax.npy', np.array([]))
-
-                else:
-                    embed = np.load('./storeEmbedding/embedding.npy', allow_pickle=True)         
-                    names = np.load('./storeEmbedding/name.npy', allow_pickle=True)
-                    ids = np.load('./storeEmbedding/id.npy', allow_pickle=True)
-                    gpaxs = np.load('./storeEmbedding/gpax.npy', allow_pickle=True)
-
-
-                embed = np.append(embed, [student['embedded_face']])
-                np.save('./storeEmbedding/embedding.npy', embed)
-
-                names = np.append(names, [student['student_first_name']])
-                np.save('./storeEmbedding/name.npy', names)
-
-                ids = np.append(ids, [student['student_id']])
-                np.save('./storeEmbedding/id.npy', ids) 
-
-                gpaxs = np.append(gpaxs, [student['gpax']])
-                np.save('./storeEmbedding/gpax.npy', gpaxs) 
-
-                count = False
-        return redirect(url_for('live', room=room, course=course))
-    else:
-        url = 'https://face-senior.herokuapp.com/fetchCourse'
-        payload = {'semester': 2, "academic_year": 2564 }
-
-        res = requests.post(url, json=payload, allow_redirects=True)
-
-        result = json.loads(res.content)
-
-        return render_template('choose_course.html', courses=result['courses'], room=room)
-
-
-# ลบออก
-# @app.route("/")
-# def index():
-# 	# return the rendered template
-# 	return render_template("index.html")
 
 # check to see if this is the main thread of execution
 if __name__ == '__main__':
@@ -368,4 +330,5 @@ if __name__ == '__main__':
 	app.run(host=args["ip"], port=args["port"], debug=True,
 		threaded=True, use_reloader=False)
 # release the video stream pointer
-inputStream.stop()
+#TODO
+# inputStream.stop()

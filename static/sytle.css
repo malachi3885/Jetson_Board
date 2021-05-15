@@ -5,20 +5,60 @@
   margin-left: 15%;
 }
 
+.header-iClock {
+  background-color: #e2e2e2;
+  color: #5a5a5a;
+  width: 960px;
+  margin-left: 200px;
+  display: flex;
+}
+.header-iClock-left {
+  font-size: 110px;
+  text-align: center;
+  margin-top: 20px;
+  margin-left: 30px;
+}
+
+.header-iClock-right {
+  margin: 10px 0 10px 20px;
+}
+
 .header-font {
   font-size: 110px;
   text-align: center;
 }
 
+.low-line-height {
+  line-height: 75%;
+}
+
 .sub-header-font {
   font-weight: lighter;
   font-size: 40px;
-  text-align: center;
+  /* text-align: center; */
+}
+
+.light {
+  font-weight: normal;
+}
+
+.full-width {
+  width: 100%;
 }
 
 .live-left {
   width: 50%;
   margin-left: 20px;
+}
+
+.login {
+  position: fixed;
+  width: 255px;
+  height: 220px;
+  top: 50%;
+  left: 50%;
+  margin-top: -50px;
+  margin-left: -125px;
 }
 
 .live-right {
@@ -36,4 +76,48 @@
 
 .border {
   border: 2px solid black;
+}
+
+.manage-student {
+  width: 70%;
+  margin-left: 15%;
+  margin-top: 30px;
+}
+
+.student-table {
+  margin-top: 30px;
+}
+
+.back-button {
+  margin-left: 10px;
+}
+
+.admin-homepage {
+  display: flex;
+}
+
+.admin-homepage-left {
+  position: fixed;
+  left: 250px;
+  top: 330px;
+  display: grid;
+  text-align: center;
+}
+.flex {
+  display: flex;
+}
+
+.setting-clock-button {
+  height: 30px;
+  margin: auto;
+  margin-left: 10px;
+  position: relative;
+}
+
+.admin-homepage-right {
+  position: fixed;
+  left: 800px;
+  top: 320px;
+  display: grid;
+  text-align: center;
 }
