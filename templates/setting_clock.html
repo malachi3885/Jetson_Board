@@ -25,15 +25,12 @@
 
   <h2 class="light">Or</h2>
   <br />
-  <div class="flex">
-    <h2 class="light">Add by Excel</h2>
-    <input
-      class="setting-clock-button"
-      type="submit"
-      name="button"
-      value="Add"
-    />
-  </div>
+  <form action={{url_for('index')}} method="post" enctype=multipart/form-data>
+      {{form.hidden_tag()}}
+      {{form.file()}}
+      <br><br>
+      {{form.submit()}}
+  </form>
 </div>
 
 {% endblock %}

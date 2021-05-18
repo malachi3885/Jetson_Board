@@ -4,15 +4,16 @@ import argparse
 import imutils
 import time
 import cv2
-from flask import Flask, render_template, redirect, flash, url_for, session, Response, request
+from flask import Flask, render_template, redirect, flash, url_for, session, Response, request, jsonify
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField
+from wtforms import StringField, SubmitField, FileField
 from crontab import CronTab
 from scipy.spatial.distance import cdist
 import numpy as np
 import datetime
 from faceDetectorAndAlignment import faceDetectorAndAlignment
 from faceEmbeddingExtractor import faceEmbeddingExtractor
+from pandas import pd
 import requests
 import json
 import os
@@ -32,6 +33,8 @@ app.config['SECRET_KEY'] = 'tempKey'
 #TODO
 cron = CronTab(user='mickey')
 
+IPmapping = {'319':'192.168.86.35','412':'192.168.1.53'}
+
 detector = faceDetectorAndAlignment('models/faceDetector.onnx', processScale=0.5)
 embeddingExtractor = faceEmbeddingExtractor('models/r100-fast-dynamic.onnx')
 
@@ -41,9 +44,23 @@ class setupForm(FlaskForm):
 	endtime = StringField('End: ')
 	submit = SubmitField('Submit')
 
+class excelForm(FlaskForm):
+    file = FileField('csv file')
+    submit = SubmitField('Upload')
+	
 class setupFormSubmit(FlaskForm):
 	submit = SubmitField('Submit')
 
+def to_send(df):
+    data = dict()
+    for index, row in df.iterrows():
+        if get_IP(row['room']) in data:
+            data[get_IP(row['room'])].append([row['room'],row['course_id'],row['course_name'],row['section'],row['date'],row['begin'],row['end']])
+        else:
+            data[get_IP(row['room'])] = []
+            data[get_IP(row['room'])].append([row['room'],row['course_id'],row['course_name'],row['section'],row['date'],row['begin'],row['end']])
+    return data
+	
 def validatetime(hour, minute, endhour, endminute, day, month):
 	hour = int(hour)
 	minute = int(minute)
@@ -58,6 +75,9 @@ def formatdatetime(x):
 	else:
 		return str(x)
 #TODO
+
+def get_IP(room):
+    return IPmapping[str(room)]
 
 def writetime(hour, minute, endhour, endminute, day, month, n):
 	hour = int(hour)
@@ -132,7 +152,18 @@ def admin_home():
 
 @app.route('/setting_clock', methods=['GET','POST'])
 def setting_clock():
-	return render_template('setting_clock.html')
+	form = excelForm()
+
+	if form.validate_on_submit():
+		full_timetable = pd.read_csv(form.file.data)
+		data = to_send(full_timetable)
+		headers = {'Content-Type': 'application/json', 'Accept':'application/json'}
+		#for i in data:
+		#    requests.post(i, i.values())
+		x = requests.post('http://192.168.1.53/writecron', json=data['192.168.1.53'])
+		return render_template('success.html', data=data)
+
+    	return render_template('setting_clock.html', form=form)
 
 @app.route('/manage_student', methods=['GET','POST'])
 def manage_student():
