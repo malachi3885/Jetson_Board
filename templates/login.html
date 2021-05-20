@@ -17,19 +17,21 @@
 
 <br />
 <div class="login">
-  <h2 class="light">ID</h2>
-  <input class="full-width" />
-  <h2 class="light">Password</h2>
-  <input class="full-width" />
-  <br />
-  <br />
-  <input
-    style="font-size: 18px"
-    class="btn btn-primary full-width"
-    type="submit"
-    name="button"
-    value="Login"
-  />
+  <form method="POST">
+    <h2 class="light">ID</h2>
+    <input class="full-width" name="username" />
+    <h2 class="light">Password</h2>
+    <input type="password" class="full-width" name="password" />
+    <br />
+    <br />
+    <input
+      style="font-size: 18px"
+      class="btn btn-primary full-width"
+      type="submit"
+      name="button"
+      value="Login"
+    />
+  </form>
 </div>
 
 {% endblock %}

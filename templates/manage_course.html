@@ -1,4 +1,10 @@
-{% extends 'base.html'%} {% block head %} {% endblock %} {% block body %}
+{% extends 'base.html'%} {% block head %}<link
+  rel="stylesheet"
+  href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"
+/>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+{% endblock %} {% block body %}
 <a href="/admin" class="back-button">Back </a>
 <div class="header" style="height: 150px">
   <h1 class="header-font">Manage Course</h1>
@@ -7,8 +13,60 @@
 
 <div class="manage-student">
   <input type="text" />
+  <div class="modal fade" id="myModal" role="dialog">
+    <form method="POST">
+
+    <div class="modal-dialog">
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-body flex modal-input">
+          <h2 class="light">Course ID:</h2>
+          <input class="text-input" name="course-id" />
+        </div>
+        <div class="modal-body flex modal-input">
+          <h2 class="light">Course Name:</h2>
+          <input class="text-input" name="course-name" />
+        </div>
+        <div class="modal-body flex modal-input">
+          <h2 class="light">Section:</h2>
+          <input class="text-input" name="section" />
+        </div>
+        <div class="modal-body flex modal-input">
+          <h2 class="light">Academic Year:</h2>
+          <input class="text-input" name="year" />
+        </div>
+        <div class="modal-body flex modal-input">
+          <h2 class="light">Semester:</h2>
+          <input class="text-input" name="semester" />
+        </div>
+        <div class="modal-body flex modal-input">
+          <h2 class="light">Teacher ID:</h2>
+          <input class="text-input" name="teacher-id" />
+        </div>
+
+        <div style="margin-top: 15px" class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">
+            Close
+          </button>
+            <input
+              class="btn btn-default"
+              type="submit"
+              name="button"
+              value="Confirm"
+            />
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
   <input type="submit" name="button" value="Search" />
-  <input type="submit" name="button" value="Add" />
+  <input
+    type="submit"
+    name="button"
+    value="Add"
+    data-toggle="modal"
+    data-target="#myModal"
+  />
   <table class="table table-striped student-table">
     <thead>
       <tr style="text-align: center">
@@ -21,12 +79,13 @@
     </thead>
     <tbody>
       {% for course in courses %}
-      <tr style="text-align: center">
+      <!-- <tr style="text-align: center"> -->
+      <tr>
         <td>{{course["id"]}}</td>
         <td>{{course["name"]}}</td>
-        <td>{{course["section"]}}</td>
+        <td style="padding-left: 25px">{{course["section"]}}</td>
         <td>{{course["year"]}}</td>
-        <td>{{course["semester"]}}</td>
+        <td style="padding-left: 35px">{{course["semester"]}}</td>
       </tr>
       {% endfor %}
     </tbody>

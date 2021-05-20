@@ -38,6 +38,12 @@
   /* text-align: center; */
 }
 
+.section-header {
+  font-weight: lighter;
+  font-size: 40px;
+  text-align: center;
+}
+
 .light {
   font-weight: normal;
 }
@@ -59,6 +65,16 @@
   left: 50%;
   margin-top: -50px;
   margin-left: -125px;
+}
+
+.choose-course {
+  position: fixed;
+  width: 350px;
+  height: 320px;
+  top: 50%;
+  left: 50%;
+  margin-top: -50px;
+  margin-left: -150px;
 }
 
 .live-right {
@@ -120,4 +136,21 @@
   top: 320px;
   display: grid;
   text-align: center;
+}
+
+.text-input {
+  height: 24px;
+  position: absolute;
+  bottom: 3px;
+  left: 250px;
+  /* transform: translateY(-50%); */
+}
+
+.border {
+  border: 2px solid black;
+}
+
+.modal-input {
+  height: 68px;
+  border: 2px;
 }

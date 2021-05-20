@@ -11,21 +11,24 @@
 <div class="login">
   <h2 class="light">Choose Room</h2>
   <br />
+<form method="POST">
 
-  <div class="flex">
-    <input class="full-width" />
-    <input
-      class="setting-clock-button"
-      type="submit"
-      name="button"
-      value="Enter"
-    />
-  </div>
+
+    <div class="flex">
+      <input class="full-width" name="room" />
+      <input
+        class="setting-clock-button"
+        type="submit"
+        name="button"
+        value="Enter"
+      />
+    </div>
+</form>
   <br />
 
   <h2 class="light">Or</h2>
   <br />
-  <form action={{url_for('index')}} method="post" enctype=multipart/form-data>
+  <form action={{url_for('setting_clock')}} method="post" enctype=multipart/form-data>
       {{form.hidden_tag()}}
       {{form.file()}}
       <br><br>

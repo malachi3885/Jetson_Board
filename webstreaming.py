@@ -13,7 +13,7 @@ import numpy as np
 import datetime
 from faceDetectorAndAlignment import faceDetectorAndAlignment
 from faceEmbeddingExtractor import faceEmbeddingExtractor
-from pandas import pd
+import pandas as pd
 import requests
 import json
 import os
@@ -24,8 +24,8 @@ lock = threading.Lock()
 app = Flask(__name__)
 
 #TODO
-# inputStream = cv2.VideoCapture(0)
-#time.sleep(2.0)
+inputStream = cv2.VideoCapture(0)
+time.sleep(2.0)
 
 # Add from satit file
 app.config['SECRET_KEY'] = 'tempKey'
@@ -142,50 +142,103 @@ def writetime(hour, minute, endhour, endminute, day, month, n):
 
 
 
-@app.route('/login', methods=['GET','POST'])
+@app.route('/', methods=['GET','POST'])
 def login():
-	return render_template('login.html')
+    if request.method == 'POST':
+        session.pop('user', None)
+        username = request.form['username']
+        password = request.form['password']
+        payload = {"username" : username, "password": password}
+        url = 'https://face-senior.herokuapp.com/login'
+
+        res = requests.post(url, json=payload, allow_redirects=True)
+        result = json.loads(res.content)
+        if(result['status']=='success'):
+            role = result['user']['role']
+            user = result['user']
+            if role == 'admin':
+                session['user'] = user
+                return redirect(url_for('admin_home'))
+            if role == 'teacher':
+                session['user'] = user
+                return redirect(url_for('teacher_home'))
+        return redirect(url_for('login'))
+    return render_template('login.html')
 
 @app.route('/admin', methods=['GET','POST'])
 def admin_home():
-	return render_template('admin_home.html')
+    if 'user' in session and session['user']['role'] == 'admin':
+        if request.method == 'POST':
+            session.pop('user', None)
+            return redirect(url_for('login'))
+        return render_template('admin_home.html')
+    else :
+        return redirect(url_for('login'))
+
+@app.route('/teacher', methods=['GET','POST'])
+def teacher_home():
+    if request.method == 'POST':
+        if request.form['button'] == 'log out':
+            session.pop('user', None)
+            return redirect(url_for('login'))
+        elif request.form['button'] == 'Enter':
+            room = request.form['room']
+            return redirect(url_for('course',room=room))
+    return render_template('teacher_home.html')
 
 @app.route('/setting_clock', methods=['GET','POST'])
 def setting_clock():
-	form = excelForm()
+    if request.method == 'POST':
+        if request.form['button'] == 'Enter':
+            room = request.form['room']
+            return redirect(url_for('set_clock',room=room))
+    form = excelForm()
 
-	if form.validate_on_submit():
-		full_timetable = pd.read_csv(form.file.data)
-		data = to_send(full_timetable)
-		headers = {'Content-Type': 'application/json', 'Accept':'application/json'}
-		#for i in data:
-		#    requests.post(i, i.values())
-		x = requests.post('http://192.168.1.53/writecron', json=data['192.168.1.53'])
-		return render_template('success.html', data=data)
+    if form.validate_on_submit():
+        full_timetable = pd.read_csv(form.file.data)
+        data = to_send(full_timetable)
+        headers = {'Content-Type': 'application/json', 'Accept':'application/json'}
+        #for i in data:
+        #    requests.post(i, i.values())
+        x = requests.post('http://192.168.1.53/writecron', json=data['192.168.1.53'])
+        return render_template('success.html', data=data)                       
 
-    	return render_template('setting_clock.html', form=form)
+    return render_template('setting_clock.html', form=form)
 
 @app.route('/manage_student', methods=['GET','POST'])
 def manage_student():
     students = list()
-    student = dict({'id': '6030631621', 'name': 'Itsara', 'Nickname': 'Mickey', 'GPAX': '3.05'})
-    students.append(student)
-    student = dict({'id': '6030631321', 'name': 'Satit', 'Nickname': 'Tui', 'GPAX': '3.05'})
-    students.append(student)
-    student = dict({'id': '6030631221', 'name': 'Anawat', 'Nickname': 'Pau', 'GPAX': '3.05'})
-    students.append(student)
+    url = 'https://face-senior.herokuapp.com/getAllStudent'
+    res = requests.get(url, allow_redirects=True)
+    result = json.loads(res.content)
+    for student in result['students']:
+        students.append(dict({'id': student['student_id'], 'first_name': student['first_name'],  'last_name': student['last_name'],'Nickname': student['nick_name'],'GPAX': student['gpax']}))
+    if request.method == 'POST':
+        print(10112)
+    
     return render_template('manage_student.html', students=students)
 
 @app.route('/manage_course', methods=['GET','POST'])
 def manage_course():
     courses = list()
-    course = dict({'id': '2100499', 'name': 'Project XD', 'section': '1', 'year': '2563', 'semester': '2'})
-    courses.append(course)
-    course = dict({'id': '2110499', 'name': 'Eng Project', 'section': '1', 'year': '2563', 'semester': '2'})
-    courses.append(course)
-    course = dict({'id': '2100471', 'name': 'VLSI', 'section': '1', 'year': '2563', 'semester': '2'})
-    courses.append(course)
-    
+    url = 'https://face-senior.herokuapp.com/getAllCourse'
+    res = requests.get(url, allow_redirects=True)
+    result = json.loads(res.content)
+    for course in result['courses']:
+        courses.append(dict({'id': course['course_id'], 'name': course['course_name'], 'section': course['section'], 'year': course['academic_year'], 'semester':course['semester'], 'ocourse_id':course['ocourse_id'], 'teacher_id':course['teacher_id']}))
+    if request.method == 'POST':
+        if request.form['button'] == 'Confirm':
+            course_id = request.form['course-id']
+            course_name = request.form['course-name']
+            section = request.form['section']
+            year = request.form['year']
+            semester = request.form['semester']
+            teacher_id = request.form['teacher-id']
+            payload = {"course_id" : course_id, "section": section, "course_name": course_name, "academic_year": year, "semester": semester, "teacher_id": teacher_id}
+            url = 'https://face-senior.herokuapp.com/addCourse'
+            res = requests.post(url, json=payload, allow_redirects=True)
+            result = json.loads(res.content)
+            return redirect(url_for('manage_course'))
     return render_template('manage_course.html', courses=courses)
 
 @app.route('/room<room>/clock', methods=['GET','POST'])
@@ -231,8 +284,8 @@ def gen():
 
 
 
-@app.route('/room<room>/course<course>/live', methods=['POST', 'GET'])
-def live(room, course):
+@app.route('/room<room>/course<course>/section<section>/live', methods=['POST', 'GET'])
+def live(room, course, section):
     students = list()
     student = dict({'id': '6030631621', 'name': 'Itsara'})
     students.append(student)
@@ -293,16 +346,10 @@ def live(room, course):
 
 
         elif request.form['button'] == 'Clear':
-            
             faces = np.load('./storeEmbedding/embedding.npy', allow_pickle=True)
-
-            print('mickey2')
-            print(students)
-            
             students.clear()
         elif request.form['button'] == 'Add' :
             student = dict()
-            
             add_id = request.form['add_id']
             add_name = request.form['add_name']
             if (len(add_id) == 10 and len(add_name) > 0):
@@ -320,23 +367,22 @@ def live(room, course):
                 add_student['student_id'] = student['id']
                 add_students.append(add_student)
             payload = {"course_id" : course, "semester": 2, "date": date, "academic_year": 2564,  "students": add_students}
-            
-            
-            print(payload)
-
             res = requests.post(url, json=payload, allow_redirects=True)
             result = json.loads(res.content)
-            print('res')
-            print(result)
     #TODO
     # img = cv2.imread('./img.png')
     # img = os.path.join('static', 'img.png')
     # print('img', img)
     # return render_template('live_stream.html', room=room, course=course, students=students, user_img=img)
-    return render_template('live_stream.html', room=room, course=course, students=students)
+    return render_template('live_stream.html', room=room, course=course, section=section, students=students)
 
-@app.route('/room<room>/choose_course')
+@app.route('/room<room>/choose_course', methods=['POST', 'GET'])
 def course(room):
+    if request.method == 'POST':
+        if request.form['button'] == 'Enter':
+            course = request.form['course']
+            section = request.form['section']
+            return redirect(url_for('live',room=room,course=course,section=section))
     return render_template('choose_course.html',room=room)
 
 
