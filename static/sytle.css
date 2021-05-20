@@ -28,6 +28,10 @@
   text-align: center;
 }
 
+.header-font-student-in-course {
+  font-size: 55px;
+  text-align: center;
+}
 .low-line-height {
   line-height: 75%;
 }
@@ -83,7 +87,11 @@
 }
 
 .right {
+  position: relative;
   float: right;
+}
+.left {
+  float: left;
 }
 
 .live {
@@ -146,11 +154,18 @@
   /* transform: translateY(-50%); */
 }
 
+.file-input {
+  height: 28px;
+  position: absolute;
+  bottom: 0px;
+  left: 250px;
+}
+
 .border {
   border: 2px solid black;
 }
 
 .modal-input {
   height: 68px;
-  border: 2px;
+  /* border: 2px; */
 }

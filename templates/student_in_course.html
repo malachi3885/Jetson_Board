@@ -1,0 +1,104 @@
+{% extends 'base.html'%} {% block head %}
+<link
+  rel="stylesheet"
+  href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"
+/>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+{% endblock %} {% block body %}
+<a href="/manage_course" class="back-button">Back </a>
+<div class="header" style="height: 150px">
+  <!-- <h1 class="header-font"></h1> -->
+  <!-- <h2 class="sub-heading">Section {{section}} Year {{year}} Semester {{semester}} </h2> -->
+  <h1 class="header-font-student-in-course">
+    {{course_id}} &nbsp; {{course_name}}
+  </h1>
+  <h3 class="section-header">
+    Section {{section}} &nbsp; Year {{year}} &nbsp; Semester {{semester}}
+  </h3>
+</div>
+
+<!-- <img src="{{ url_for('static', filename='img.png') }}" alt="{{ user_img }}" /> -->
+
+<div class="manage-student">
+    <div class="modal fade" id="myModal" role="dialog">
+    <form method="POST">
+
+    <div class="modal-dialog">
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-body flex modal-input">
+          <h2 class="light">Student ID:</h2>
+          <input class="text-input" name="student-id" />
+        </div>
+
+        <div style="margin-top: 15px" class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">
+            Close
+          </button>
+            <input
+              class="btn btn-default"
+              type="submit"
+              name="button"
+              value="Confirm"
+            />
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!--  -->
+  <input
+    type="submit"
+    name="button"
+    value="Add"
+    data-toggle="modal"
+    data-target="#myModal"
+  />
+
+  <table class="table table-striped student-table">
+    <thead>
+      <tr>
+        <th>Student ID</th>
+        <th>Student Name</th>
+        <th>Nickname</th>
+        <th>GPAX</th>
+        <th>{{""}}</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for student in students %}
+      <tr>
+        <td>{{student["id"]}}</td>
+        <td>
+          <p>{{student["first_name"]}} {{" "}} {{student["last_name"]}}</p>
+        </td>
+        <td>{{student["nickname"]}}</td>
+
+        <td>{{student["GPAX"]}}</td>
+
+        <td style="width: 20px">
+          <!-- <form
+            action="{{url_for('delete_student_in_course', enroll_id=student['enroll_id'], course_id=course_id, course_name=course_name, year=year, semester=semester, section=section, ocourse_id=ocourse_id)}}"
+            method="post"
+          > -->
+          <form
+            action="{{url_for('delete_student_in_course', enroll_id=student['enroll_id'], course_id=course_id, course_name=course_name, year = year, semester = semester, section=section,ocourse_id = ocourse_id)}}"
+            method="post"
+          >
+            <input type="hidden" name="_method" value="DELETE" />
+            <input
+              style="border: 0px"
+              type="submit"
+              name="button"
+              value="&times;"
+              style="width: 20px"
+            />
+          </form>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

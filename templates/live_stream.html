@@ -1,4 +1,11 @@
-{% extends 'base.html'%} {% block head %} {% endblock %} {% block body %}
+{% extends 'base.html'%} {% block head %}
+<link
+  rel="stylesheet"
+  href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"
+/>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+{% endblock %} {% block body %}
 <a href="/room{{room}}/choose_course" class="button">back</a>
 <div class="header">
   <h1 class="header-font">Room {{room}}</h1>
@@ -10,14 +17,52 @@
 
 <br />
 <div class="live">
+  <!-- Large modal -->
+
+  <div
+    class="modal fade bd-example-modal-lg"
+    tabindex="-1"
+    role="dialog"
+    aria-labelledby="myLargeModalLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <img
+          src="{{ url_for('static', filename = 'img.png') }}"
+          style="width: 100%; height: 500px"
+        />
+      </div>
+    </div>
+  </div>
+
+  <!--  -->
+
+  <!--  -->
   <div class="live-left">
     <img src="{{ url_for('video_feed') }}" style="width: 100%" />
-    <form action="#" method="post" style="margin-top: 10px">
-      <p>
-        <input type="submit" name="button" value="Show" />
+    <div style="margin-top: 10px; display: flex; width: 100%; border: red">
+      <form style="width: 100%" action="#" method="post" class="right">
+        <input
+          type="submit"
+          name="button"
+          value="Show"
+          data-toggle="modal"
+          data-target=".bd-example-modal-lg"
+        />
 
         <input class="right" type="submit" name="button" value="Check" />
-      </p>
+      </form>
+    </div>
+
+    <form
+      style="margin-top: 10px"
+      action="#"
+      enctype="multipart/form-data"
+      method="POST"
+    >
+      <input type="file" name="pic" />
+      <input type="submit" name="button" value="Upload a file" />
     </form>
   </div>
   <div class="live-right">
@@ -40,7 +85,7 @@
         {% for student in students %}
         <tr>
           <td>{{student["id"]}}</td>
-          <td>{{student["name"]}}</td>
+          <td>{{student["first_name"]}}</td>
         </tr>
         {% endfor %}
       </tbody>
@@ -63,6 +108,8 @@
       </p>
     </form>
   </div>
-</div>
+  <!--
+   -->
 
-{% endblock %}
+  {% endblock %}
+</div>
