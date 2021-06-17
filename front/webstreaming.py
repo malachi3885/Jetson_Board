@@ -18,6 +18,7 @@ import requests
 import json
 import os
 
+
 outputFrame = None
 lock = threading.Lock()
 
@@ -183,7 +184,9 @@ def teacher_home():
             return redirect(url_for('login'))
         elif request.form['button'] == 'Enter':
             room = request.form['room']
-            return redirect(url_for('course',room=room))
+            user = session['user']
+            #ย้ายไปipของห้องต่างๆ
+            return redirect('http://192.168.2.41:8000/room'+str(room)+'/choose_course')
     return render_template('teacher_home.html')
 
 @app.route('/setting_clock', methods=['GET','POST'])
@@ -191,7 +194,7 @@ def setting_clock():
     if request.method == 'POST':
         if request.form['button'] == 'Enter':
             room = request.form['room']
-            return redirect(url_for('set_clock',room=room))
+            return redirect('http://192.168.2.41:8000/room'+str(room)+'/clock')
     form = excelForm()
 
     if form.validate_on_submit():
